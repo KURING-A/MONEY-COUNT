@@ -1,0 +1,20 @@
+{
+  "name": "시드북 - 입출금 매매일지 달력",
+  "short_name": "시드북",
+  "description": "거래 내역이 아니라 입금·출금·손익, 메모와 사진만 남기는 나만의 매매일지 달력",
+  "start_url": "./index.html",
+  "id": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#EDF1E7",
+  "theme_color": "#EDF1E7",
+  "lang": "ko",
+  "dir": "ltr",
+  "categories": ["finance", "productivity"],
+  "icons": [
+    { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
