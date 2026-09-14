@@ -1,0 +1,8 @@
+[{
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target": {
+                  "namespace": "android_app",
+                  "package_name": "io.github.kuring_a.twa",
+                  "sha256_cert_fingerprints": ["1D:82:66:A2:C5:A5:D2:F3:2A:13:BA:5A:B7:7E:4C:75:70:30:BA:20:04:1D:81:FD:35:F2:A3:A7:AC:A4:64:E3"]
+        }
+}]
