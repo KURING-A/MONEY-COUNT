@@ -1,6 +1,6 @@
 // 초간편 달력형 매매일지 서비스 워커 — 앱 셸을 캐시해서 오프라인에서도 열리게 해줘요.
 // 배포할 때마다 CACHE_NAME 뒤의 숫자를 올려주면 예전 캐시를 정리하고 새 버전을 받아가요.
-const CACHE_NAME = "trade-journal-shell-v2";
+const CACHE_NAME = "trade-journal-shell-v3";
 const SHELL_FILES = [
   "./",
   "./index.html",
