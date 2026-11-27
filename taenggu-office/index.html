@@ -123,8 +123,8 @@ input{font-family:inherit}
 .badge{
   position:absolute;transform:translate(-50%,-50%);
   background:rgba(255,255,255,.95);border:1px solid rgba(122,78,36,.16);
-  color:#5C3A19;font-size:11px;font-weight:800;letter-spacing:-.2px;
-  padding:6px 10px;border-radius:999px;white-space:nowrap;
+  color:#5C3A19;font-size:10.5px;font-weight:800;letter-spacing:-.2px;
+  padding:5px 9px;border-radius:999px;white-space:nowrap;
   box-shadow:0 4px 12px rgba(90,60,30,.18);display:flex;align-items:center;gap:4px;
   transition:transform .15s ease;
 }
@@ -329,7 +329,7 @@ input{font-family:inherit}
     <div class="hero-card">
       <span class="hero-pill">👑 탱구 비서실 본부</span>
       <h2 class="hero-h">대장님, 파트 5개가 가동 중이에요</h2>
-      <p class="hero-p">방을 눌러 들어가 보세요. 파트별 최신 보고와 진행 상황이 바로 뜹니다.</p>
+      <p class="hero-p">방을 눌러 들어가 보세요. 파트별 최신 현황이 열려요.</p>
     </div>
 
     <div class="controls">
@@ -347,10 +347,10 @@ input{font-family:inherit}
     </div>
 
     <div class="map-wrap moving" id="mapWrap">
-      <img class="map-img" id="mapImg" src="office-clay.webp" alt="탱구 본부 오피스 맵" width="1100" height="1100">
+      <img class="map-img" id="mapImg" src="office-clay.webp" alt="탱구 본부 오피스 맵" width="1100" height="1118">
       <div id="badges"></div>
     </div>
-    <p class="map-hint">원하는 티트 배지를 탭하면 오늘 기준 진행 현황이 열려요</p>
+    <p class="map-hint">원하는 배지를 탭하면 오늘 기준 진행 현황이 열려요</p>
 
     <div class="pwa-note">
       📲 <span><b>홈 화면에 추가</b>하면 앱처럼 열려요. 안드로이드 크롬·삼성 인터넷은 우측 상단 메뉴 → “홈 화면에 추가”, 아이폰은 공유 → “홈 화면에 추가”.</span>
@@ -561,13 +561,13 @@ const PARTS = {
           ['커피','한 잔 더 내려도 됩니다']]}
 };
 const BADGES = [
-  {id:'board', x:{clay:20,y:45}, label:'🏛️ 대회의실'},
-  {id:'chief', x:{clay:59,y:20}, label:'🎯 지휘실'},
-  {id:'prod',  x:{clay:33,y:41}, label:'🎬 쇼츠 제작'},
-  {id:'anal',  x:{clay:69,y:43}, label:'📈 성과 분석'},
-  {id:'social',x:{clay:51,y:62}, label:'💬 댓글 소통'},
-  {id:'biz',   x:{clay:87,y:30}, label:'💰 Etsy/혜택'},
-  {id:'lounge',x:{clay:77,y:80}, label:'☕ 라운지'}
+  {id:'board', x:{clay:17,y:44}, label:'🏛️ 대회의실'},
+  {id:'chief', x:{clay:63,y:25}, label:'🎯 지휘실'},
+  {id:'prod',  x:{clay:43,y:47}, label:'🎬 쇼츠 제작'},
+  {id:'anal',  x:{clay:73,y:50}, label:'📈 성과 분석'},
+  {id:'social',x:{clay:57,y:72}, label:'💬 댓글 소통'},
+  {id:'biz',   x:{clay:85,y:33}, label:'💰 Etsy/혜택'},
+  {id:'lounge',x:{clay:79,y:82}, label:'☕ 라운지'}
 ];
 const BADGE_POS_BASIC = {
   board:[22,55], chief:[49,17], prod:[40,41], anal:[68,41], social:[40,58], biz:[88,25], lounge:[78,77]
