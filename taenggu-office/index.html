@@ -74,9 +74,10 @@ input{font-family:inherit}
 .tab{
   flex:1 0 auto;min-width:61px;display:flex;flex-direction:column;align-items:center;gap:3px;
   padding:8px 6px;border-radius:16px;font-size:11px;font-weight:700;color:var(--ink2);
-  background:var(--card2);border:1px solid var(--line);transition:transform .12s ease, background .2s;
+  background:var(--card2);border:1px solid var(--line);transition:background .2s;
 }
 .tab .ti{font-size:17px;line-height:1}
+.tab .tl{line-height:1.15;white-space:nowrap}
 .tab.active{
   background:linear-gradient(160deg,#8B5A2B,#6B421A);color:#fff3e4;border-color:#6B421A;
   box-shadow:0 6px 16px rgba(107,66,26,.28);
@@ -316,11 +317,11 @@ input{font-family:inherit}
       <div class="status-pill"><span class="dot pulse"></span>가동 중</div>
     </div>
     <nav class="tabs" id="tabs">
-      <button class="tab active" data-tab="map"><span class="ti">🗺️</span>오피스 맵</button>
-      <button class="tab" data-tab="meet"><span class="ti">💬</span>회의실</button>
-      <button class="tab" data-tab="work"><span class="ti">📋</span>작업실</button>
-      <button class="tab" data-tab="status"><span class="ti">📊</span>비서현황</button>
-      <button class="tab" data-tab="memo"><span class="ti">📝</span>메모</button>
+      <button class="tab active" data-tab="map"><span class="ti">🗺️</span><span class="tl">오피스 맵</span></button>
+      <button class="tab" data-tab="meet"><span class="ti">💬</span><span class="tl">회의실</span></button>
+      <button class="tab" data-tab="work"><span class="ti">📋</span><span class="tl">작업실</span></button>
+      <button class="tab" data-tab="status"><span class="ti">📊</span><span class="tl">비서현황</span></button>
+      <button class="tab" data-tab="memo"><span class="ti">📝</span><span class="tl">메모</span></button>
     </nav>
   </header>
 
