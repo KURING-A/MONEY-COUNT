@@ -130,9 +130,9 @@ input{font-family:inherit}
 }
 .badge:active{transform:translate(-50%,-50%) scale(.93)}
 .badge .lv{width:6px;height:6px;border-radius:50%;background:#2FA24C;box-shadow:0 0 0 2px rgba(47,162,76,.18)}
-.moving .badge{animation:float 4s ease-in-out infinite;animation-delay:var(--d,0s)}
+.moving .badge{animation:glow 3.4s ease-in-out infinite;animation-delay:var(--d,0s)}
 .moving .badge .lv{animation:blink 2.4s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,calc(-50% - 6px))}}
+@keyframes glow{0%,100%{box-shadow:0 4px 12px rgba(90,60,30,.18)}50%{box-shadow:0 6px 18px rgba(90,60,30,.34),0 0 0 4px rgba(255,214,163,.35)}}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
 .map-hint{font-size:11px;color:var(--muted);text-align:center;margin:10px 0 0}
 .pwa-note{
@@ -601,7 +601,7 @@ const SCHEDULES = [
    desc:'월 단위 성장률과 다음 달 실험 계획.'},
   {g:'weekly',ico:'🎬',name:'참교육극장 롱폼',when:'매주 수 13:30',weekday:[3],at:'13:30',
    desc:'13:30 제작 → 목 07:00 공개. 오프닝 5비트(갈등 → 호명 → 문제 → 목차 → 보상) 적용.'},
-  {g:'weekly',ico:'🐉',name:'Mythic Titan',when:'72시간 주기',days3:true,
+  {g:'weekly',ico:'🐉',name:'Mythic Titan',when:'72시간 주기',anchor:'2026-11-29T11:09',
    desc:'문명형 연속 시리즈. 다음 회차까지 72시간 간격 유지.'},
   {g:'once',ico:'🏠',name:'연말정산 월세 세액공제 알림',when:'2027-01-15',once:'2027-01-15T10:02',
    desc:'신청 시즌에 맞춰 준비 서류와 일정을 먼저 알려드려요.'},
@@ -690,7 +690,22 @@ function fmt(n){ return n.toLocaleString('ko-KR'); }
 function nextRun(s){
   const now=new Date();
   if(s.once){ const t=new Date(s.once); return t>now?t:null; }
-  if(s.days3){ const t=new Date(now.getTime()+ (3*24*60)*60000); return t; }
+  if(s.anchor){
+    let t=new Date(s.anchor);
+    while(t<=now) t=new Date(t.getTime()+3*24*3600*1000);
+    return t;
+  }
+  if(s.at==='40m'){
+    const t=new Date(now); t.setSeconds(0,0); t.setMinutes(40);
+    const limit=new Date(now); limit.setHours(23,40,0,0);
+    while(t<=now) t.setHours(t.getHours()+1);
+    const h=t.getHours(), m=t.getMinutes();
+    if(h<8 || h>23 || (h===23 && m>40)){
+      if(h>23 || h===23){ t.setDate(t.getDate()+1); }
+      t.setHours(8,40,0,0);
+    }
+    return t;
+  }
   const [H,M]=s.at.split(':').map(Number);
   if(s.g==='daily'){
     const t=new Date(now); t.setHours(H,M,0,0);
