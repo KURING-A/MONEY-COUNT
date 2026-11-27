@@ -1,0 +1,24 @@
+{
+  "name": "태영 님 비서실 · 탱구 본부",
+  "short_name": "탱구 본부",
+  "description": "태영 님 전용 비서실 — 오피스 맵, 회의실, 작업실, 비서현황, 메모",
+  "lang": "ko",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#F8F4EE",
+  "theme_color": "#F8F4EE",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "apple-touch-icon.png", "sizes": "180x180", "type": "image/png", "purpose": "any" }
+  ],
+  "shortcuts": [
+    { "name": "오피스 맵", "url": "./index.html" },
+    { "name": "비서현황", "url": "./index.html" }
+  ]
+}

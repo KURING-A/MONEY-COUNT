@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>태영 님 비서실 · 탱구 본부</title>
+<meta name="description" content="태영 님 전용 비서실 — 탱구 본부. 오피스 맵, 회의실, 작업실, 비서현황, 메모.">
+<meta name="theme-color" content="#F8F4EE">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="탱구 본부">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="favicon-32.png" sizes="32x32">
+<style>
+:root{
+  --cream:#F8F4EE; --card:#FFFFFF; --card2:#FAF7F2;
+  --brown:#7A4E24; --brown-deep:#5C3A19; --brown-soft:#A9793F;
+  --green-bg:#E6F4EA; --green:#1E8E3E;
+  --ink:#2E2A24; --ink2:#5A5147; --muted:#8C8175; --line:#EEE4D6;
+  --pink:#FBE7DC;
+  --radius:20px;
+  --shadow:0 6px 20px rgba(122,78,36,.07);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--cream); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;
+  font-size:14px; line-height:1.5; -webkit-font-smoothing:antialiased;
+  overscroll-behavior-y:contain;
+}
+.app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--cream);position:relative;padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+@media(min-width:640px){
+  body{background:#EDE4D6}
+  .app{max-width:460px;min-height:100vh;box-shadow:0 0 60px rgba(90,60,30,.18);margin:24px auto;border-radius:28px;overflow:hidden}
+}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+input{font-family:inherit}
+
+/* ---------- header ---------- */
+.hero-head{
+  position:sticky;top:0;z-index:40;
+  background:rgba(248,244,238,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  padding:calc(10px + env(safe-area-inset-top)) 16px 10px;
+  border-bottom:1px solid rgba(238,228,214,.9);
+}
+.head-row{display:flex;align-items:center;gap:10px}
+.avatar{
+  width:46px;height:46px;border-radius:50%;flex:0 0 46px;
+  background:radial-gradient(circle at 30% 25%,#FFF6E4,#F6E3C4 70%);
+  border:1px solid #F0DFC4;display:grid;place-items:center;font-size:23px;
+  box-shadow:0 3px 10px rgba(160,120,60,.18);
+}
+.head-text{min-width:0;flex:1}
+.head-title{font-size:19px;font-weight:800;letter-spacing:-.4px;margin:0;color:#2B2318}
+.head-sub{font-size:11.5px;color:var(--ink2);display:flex;align-items:center;gap:5px;margin-top:2px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;flex:0 0 7px}
+.dot.live{box-shadow:0 0 0 0 rgba(30,142,62,.55);animation:pulse 2.2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(30,142,62,.45)}70%{box-shadow:0 0 0 7px rgba(30,142,62,0)}100%{box-shadow:0 0 0 0 rgba(30,142,62,0)}}
+.status-pill{
+  flex:0 0 auto;background:var(--green-bg);color:var(--green);font-weight:700;font-size:11.5px;
+  padding:7px 11px;border-radius:999px;display:flex;align-items:center;gap:6px;white-space:nowrap;
+  border:1px solid #D6EBDA;
+}
+
+/* ---------- tabs ---------- */
+.tabs{
+  display:flex;gap:6px;padding:9px 12px 11px;overflow-x:auto;scrollbar-width:none;
+  background:rgba(248,244,238,.75);
+}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  flex:1 0 auto;min-width:61px;display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:8px 6px;border-radius:16px;font-size:11px;font-weight:700;color:var(--ink2);
+  background:var(--card2);border:1px solid var(--line);transition:transform .12s ease, background .2s;
+}
+.tab .ti{font-size:17px;line-height:1}
+.tab.active{
+  background:linear-gradient(160deg,#8B5A2B,#6B421A);color:#fff3e4;border-color:#6B421A;
+  box-shadow:0 6px 16px rgba(107,66,26,.28);
+}
+.tab:active{transform:scale(.96)}
+
+/* ---------- generic ---------- */
+.tabpane{display:none;padding:0 14px}
+.tabpane.on{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.sec-title{font-size:12px;font-weight:800;color:var(--brown);letter-spacing:.1px;margin:20px 2px 9px;display:flex;align-items:center;gap:6px}
+.sec-title .cnt{margin-left:auto;font-weight:700;color:var(--muted);font-size:11px}
+
+/* ---------- office map ---------- */
+.hero-card{
+  margin-top:12px;padding:16px;border-radius:22px;
+  background:linear-gradient(155deg,#FFF9EF,#FBEFDE 60%,#F8EBDA);
+  border:1px solid #F1E2CB;
+}
+.hero-pill{
+  display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:var(--brown);
+  background:rgba(255,255,255,.82);border:1px solid #EFDFC6;border-radius:999px;padding:5px 10px;
+}
+.hero-h{font-size:19px;font-weight:800;letter-spacing:-.4px;margin:10px 0 4px;color:#31261A}
+.hero-p{font-size:12.5px;color:#7A6A58;margin:0}
+.controls{display:flex;gap:8px;align-items:center;margin:14px 0 10px}
+.seg{display:flex;background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{padding:7px 13px;border-radius:999px;font-size:12px;font-weight:700;color:var(--ink2);display:flex;gap:5px;align-items:center}
+.seg button.on{background:#fff;color:var(--brown-deep);box-shadow:0 2px 8px rgba(122,78,36,.13)}
+.toggle{
+  margin-left:auto;display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--brown);
+  background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 11px;
+}
+.switch{width:32px;height:19px;border-radius:999px;background:#E3D8C7;position:relative;transition:.22s;flex:0 0 32px}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;background:#fff;transition:.22s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.toggle.on .switch{background:#2FA24C}
+.toggle.on .switch::after{left:15px}
+.stat-pills{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.stat-pill{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:11.5px;font-weight:700;color:var(--ink2);display:flex;align-items:center;gap:6px}
+.stat-pill b{color:var(--brown);font-weight:800}
+.map-wrap{position:relative;border-radius:24px;overflow:hidden;background:#FBF1E4;border:1px solid #F1E2CB;box-shadow:0 10px 28px rgba(122,78,36,.14)}
+.map-img{display:block;width:100%;height:auto;transition:opacity .25s}
+.badge{
+  position:absolute;transform:translate(-50%,-50%);
+  background:rgba(255,255,255,.95);border:1px solid rgba(122,78,36,.16);
+  color:#5C3A19;font-size:11px;font-weight:800;letter-spacing:-.2px;
+  padding:6px 10px;border-radius:999px;white-space:nowrap;
+  box-shadow:0 4px 12px rgba(90,60,30,.18);display:flex;align-items:center;gap:4px;
+  transition:transform .15s ease;
+}
+.badge:active{transform:translate(-50%,-50%) scale(.93)}
+.badge .lv{width:6px;height:6px;border-radius:50%;background:#2FA24C;box-shadow:0 0 0 2px rgba(47,162,76,.18)}
+.moving .badge{animation:float 4s ease-in-out infinite;animation-delay:var(--d,0s)}
+.moving .badge .lv{animation:blink 2.4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,calc(-50% - 6px))}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+.map-hint{font-size:11px;color:var(--muted);text-align:center;margin:10px 0 0}
+.pwa-note{
+  display:flex;gap:9px;align-items:flex-start;margin-top:14px;padding:12px 13px;
+  background:#FFFDF8;border:1px dashed #E7D6BC;border-radius:16px;font-size:11.5px;color:#7A6A58;line-height:1.5;
+}
+.pwa-note b{color:var(--brown-deep)}
+
+/* ---------- sheet ---------- */
+.backdrop{position:fixed;inset:0;background:rgba(60,40,20,.36);opacity:0;pointer-events:none;transition:.22s;z-index:60}
+.backdrop.on{opacity:1;pointer-events:auto}
+.sheet{
+  position:fixed;left:50%;bottom:0;width:100%;max-width:480px;transform:translate(-50%,110%);
+  background:var(--cream);border-radius:26px 26px 0 0;z-index:61;transition:transform .28s cubic-bezier(.2,.8,.2,1);
+  max-height:80vh;display:flex;flex-direction:column;box-shadow:0 -10px 40px rgba(60,40,20,.22);
+}
+@media(min-width:640px){.sheet{max-width:460px;bottom:24px;border-radius:26px}}
+.sheet.on{transform:translate(-50%,0)}
+.sheet-head{padding:16px 18px 12px;border-bottom:1px solid var(--line);display:flex;gap:11px;align-items:flex-start}
+.sheet-ico{width:42px;height:42px;border-radius:14px;background:#FFF6E8;border:1px solid #F0DFC6;display:grid;place-items:center;font-size:21px;flex:0 0 42px}
+.sheet-t{font-size:16px;font-weight:800;margin:0;color:#31261A}
+.sheet-s{font-size:11.5px;color:var(--muted);margin-top:2px}
+.sheet-x{margin-left:auto;font-size:20px;color:var(--muted);padding:2px 4px;line-height:1}
+.sheet-body{padding:6px 18px 18px;overflow-y:auto}
+.row{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid #F4EDE2;font-size:13px}
+.row:last-child{border-bottom:0}
+.row .k{flex:0 0 74px;color:var(--muted);font-weight:700;font-size:11.5px;padding-top:2px}
+.row .v{color:var(--ink);line-height:1.55;font-weight:500}
+.sheet-btn{
+  display:block;width:100%;margin-top:6px;padding:13px;border-radius:16px;
+  background:linear-gradient(160deg,#8B5A2B,#6B421A);color:#FFF3E4;font-weight:800;font-size:13.5px;
+  box-shadow:0 6px 16px rgba(107,66,26,.25);
+}
+
+/* ---------- 회의실 ---------- */
+.subtabs{display:flex;gap:7px;padding:12px 0 10px;overflow-x:auto;scrollbar-width:none}
+.subtabs::-webkit-scrollbar{display:none}
+.subtab{padding:9px 14px;border-radius:999px;background:var(--card2);border:1px solid var(--line);font-size:12.5px;font-weight:700;color:var(--ink2);white-space:nowrap}
+.subtab.on{background:#fff;color:var(--brown-deep);border-color:#E9D3B6;box-shadow:0 3px 10px rgba(122,78,36,.1)}
+.room-bar{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--muted);font-weight:700;padding:2px 2px 10px}
+.chat{
+  background:#FBF7F0;border:1px solid var(--line);border-radius:20px;padding:8px 12px 14px;
+  min-height:320px;max-height:min(56vh,520px);overflow-y:auto;scroll-behavior:smooth;
+}
+.msg{display:flex;gap:8px;margin:13px 0;align-items:flex-start}
+.msg.right{flex-direction:row-reverse}
+.mini-av{width:30px;height:30px;border-radius:50%;flex:0 0 30px;display:grid;place-items:center;font-size:15px;background:#FFF3E2;border:1px solid #F0E0C8}
+.mini-av.user{background:radial-gradient(circle at 30% 25%,#FFF6E4,#F6E3C4);border-color:#EED9B9}
+.msg-col{max-width:82%;min-width:0}
+.msg-meta{font-size:10.5px;color:var(--muted);margin:0 2px 4px;display:flex;gap:5px;align-items:center;font-weight:700}
+.who{color:#4A3A28;font-weight:800}
+.role{font-weight:600;color:#A9998A}
+.bubble{
+  padding:11px 14px;border-radius:16px;font-size:13.3px;line-height:1.6;
+  background:#fff;border:1px solid #F0E8DC;color:#3A3026;white-space:pre-wrap;word-break:break-word;
+}
+.msg.right .bubble{background:linear-gradient(150deg,#FBE9DE,#F7DCCB);border-color:#F2D3C0;color:#4A2E15}
+.msg.right .msg-meta{justify-content:flex-start;flex-direction:row-reverse}
+.typing .bubble{display:flex;gap:4px;padding:14px}
+.typing i{width:6px;height:6px;border-radius:50%;background:#CBB9A2;display:inline-block;animation:bounce 1.1s infinite}
+.typing i:nth-child(2){animation-delay:.16s}
+.typing i:nth-child(3){animation-delay:.32s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-4px);opacity:1}}
+.composer{
+  position:sticky;bottom:0;background:linear-gradient(to top,var(--cream) 72%,rgba(248,244,238,.6));
+  padding:10px 0 calc(10px + env(safe-area-inset-bottom));margin-top:10px;
+}
+.mentions{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
+.mentions::-webkit-scrollbar{display:none}
+.mention{
+  flex:0 0 auto;padding:7px 11px;border-radius:999px;background:#fff;border:1px solid #EBDCC6;
+  font-size:11.5px;font-weight:700;color:var(--brown);white-space:nowrap;
+}
+.mention:active{background:#FDF3E6}
+.input-row{display:flex;gap:8px;align-items:flex-end;background:#fff;border:1px solid #E8DACA;border-radius:18px;padding:7px 7px 7px 14px;box-shadow:0 4px 14px rgba(122,78,36,.06)}
+.input-row input{
+  flex:1;min-width:0;border:0;outline:0;background:transparent;font-size:13.5px;padding:8px 0;color:var(--ink);
+}
+.input-row input::placeholder{color:#B3A695}
+.send{
+  width:38px;height:38px;border-radius:13px;background:linear-gradient(160deg,#8B5A2B,#6B421A);color:#FFF3E4;
+  display:grid;place-items:center;font-size:16px;flex:0 0 38px;box-shadow:0 4px 12px rgba(107,66,26,.25);
+}
+.sim-note{font-size:10.5px;color:#A99A89;text-align:center;margin:8px 0 0;line-height:1.4}
+
+/* ---------- 작업실 ---------- */
+.room-hero{margin-top:12px;padding:16px;border-radius:22px;background:linear-gradient(155deg,#FFF9EF,#FBEFDE);border:1px solid #F1E2CB}
+.sched{padding:14px 15px;margin-top:10px;display:flex;gap:12px;align-items:flex-start}
+.sched-ico{width:38px;height:38px;border-radius:13px;background:#FFF6E8;border:1px solid #F2E3CC;display:grid;place-items:center;font-size:18px;flex:0 0 38px}
+.sched-main{flex:1;min-width:0}
+.sched-top{display:flex;gap:8px;align-items:flex-start}
+.sched-name{font-size:13.5px;font-weight:800;color:#31261A;letter-spacing:-.2px;flex:1;min-width:0}
+.sched-when{flex:0 0 auto;background:var(--green-bg);color:var(--green);font-size:11px;font-weight:800;padding:5px 9px;border-radius:999px;white-space:nowrap;border:1px solid #D6EBDA}
+.sched-desc{font-size:11.8px;color:#7A6A58;margin-top:5px;line-height:1.55}
+.sched-next{font-size:11px;color:var(--brown);font-weight:700;margin-top:7px;display:flex;align-items:center;gap:5px}
+.sched-next .n{color:var(--muted);font-weight:600}
+
+/* ---------- 비서현황 ---------- */
+.kpi{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+.kpi-card{padding:13px;border-radius:18px}
+.kpi-k{font-size:11px;color:var(--muted);font-weight:700;display:flex;gap:4px;align-items:center}
+.kpi-v{font-size:20px;font-weight:800;letter-spacing:-.6px;margin-top:4px;color:#31261A}
+.kpi-v small{font-size:11.5px;font-weight:700;color:var(--muted);margin-left:3px;letter-spacing:0}
+.kpi-s{font-size:10.5px;color:var(--brown);font-weight:700;margin-top:3px}
+.up{color:var(--green)}.down{color:#C0553B}
+.goal{padding:15px;margin-top:12px}
+.goal-h{font-size:12px;font-weight:800;color:var(--brown);margin-bottom:11px;display:flex;justify-content:space-between;align-items:center}
+.goal-h span{font-weight:600;color:var(--muted);font-size:10.5px}
+.goal-row{margin-bottom:13px}
+.goal-row:last-child{margin-bottom:0}
+.goal-l{display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:6px;color:#3A3026}
+.goal-l .st{font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px}
+.st.ok{background:var(--green-bg);color:var(--green)}
+.st.no{background:#FCEBE4;color:#C0553B}
+.bar{height:8px;border-radius:999px;background:#F1E9DD;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#8B5A2B,#B98549)}
+.bar.low i{background:linear-gradient(90deg,#D98C6A,#C0553B)}
+.goal-note{font-size:10.5px;color:var(--muted);margin-top:5px}
+.tbl{padding:6px 4px;margin-top:10px;overflow:hidden}
+.tr{display:flex;align-items:center;gap:8px;padding:9px 11px;font-size:12.3px;border-bottom:1px solid #F5EEE3}
+.tr:last-child{border-bottom:0}
+.tr.head{font-size:10.5px;color:var(--muted);font-weight:800;padding:8px 11px}
+.tr .ch{flex:1;min-width:0;font-weight:700;color:#3A3026;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tr .num{flex:0 0 58px;text-align:right;font-weight:800;font-variant-numeric:tabular-nums}
+.tr .num.g{flex:0 0 40px;color:var(--muted);font-weight:700}
+.tr .mini{flex:0 0 46px;height:6px;border-radius:999px;background:#F1E9DD;overflow:hidden}
+.tr .mini i{display:block;height:100%;background:#C89A63;border-radius:999px}
+.ret-row{display:flex;align-items:center;gap:9px;padding:10px 13px;border-bottom:1px solid #F5EEE3;font-size:12.3px}
+.ret-row:last-child{border-bottom:0}
+.ret-row .rn{flex:1;font-weight:700;color:#3A3026}
+.ret-row .rb{flex:0 0 90px;height:7px;background:#F1E9DD;border-radius:999px;overflow:hidden}
+.ret-row .rb i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#7FAF8B,#2FA24C)}
+.ret-row .rv{flex:0 0 46px;text-align:right;font-weight:800;font-variant-numeric:tabular-nums}
+.live-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
+.live{padding:12px 13px;border-radius:16px}
+.live-k{font-size:10.8px;color:var(--muted);font-weight:700}
+.live-v{font-size:15px;font-weight:800;margin-top:3px;color:#31261A}
+.live-n{font-size:10px;color:#A99A89;margin-top:2px}
+.exp{padding:13px 14px;margin-top:10px}
+.exp-t{font-size:12.8px;font-weight:800;color:#31261A;display:flex;gap:6px;align-items:center}
+.exp-d{font-size:11.6px;color:#7A6A58;margin-top:5px;line-height:1.55}
+
+/* ---------- 메모 ---------- */
+.memo-item{padding:13px 14px;margin-top:9px;display:flex;gap:11px;align-items:flex-start}
+.check{
+  flex:0 0 22px;width:22px;height:22px;border-radius:7px;border:1.6px solid #DCC9AE;display:grid;place-items:center;
+  font-size:13px;color:transparent;margin-top:1px;transition:.15s;
+}
+.memo-item.done .check{background:#2FA24C;border-color:#2FA24C;color:#fff}
+.memo-body{flex:1;min-width:0}
+.memo-t{font-size:13px;font-weight:700;color:#33291D;line-height:1.45}
+.memo-item.done .memo-t{text-decoration:line-through;color:#B0A494}
+.memo-s{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5}
+.memo-tag{display:inline-block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:999px;margin-right:5px;vertical-align:1px}
+.tag-biz{background:#FDEEE2;color:#B4703A}
+.tag-ch{background:#EAF1FB;color:#3C6CB0}
+.tag-app{background:#F0ECFA;color:#6A54B5}
+.del{flex:0 0 24px;color:#C9BAA8;font-size:15px;padding:0 2px;line-height:1}
+.add-row{display:flex;gap:8px;margin-top:11px}
+.add-row input{flex:1;min-width:0;background:#fff;border:1px solid #E8DACA;border-radius:15px;padding:12px 14px;font-size:12.8px;outline:0;color:var(--ink)}
+.add-row input::placeholder{color:#B3A695}
+.add-row button{flex:0 0 auto;padding:0 16px;border-radius:15px;background:linear-gradient(160deg,#8B5A2B,#6B421A);color:#FFF3E4;font-weight:800;font-size:12.5px}
+.rule{padding:12px 14px;margin-top:8px;display:flex;gap:10px;align-items:flex-start}
+.rule-n{flex:0 0 20px;height:20px;border-radius:50%;background:#FFF3E2;border:1px solid #F0E0C8;display:grid;place-items:center;font-size:10px;font-weight:800;color:var(--brown);margin-top:1px}
+.rule-t{font-size:12.5px;font-weight:700;color:#33291D;line-height:1.45}
+.rule-d{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5}
+.foot{text-align:center;font-size:10.5px;color:#A99A89;padding:22px 20px 30px;line-height:1.7}
+.foot b{color:var(--brown-soft)}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="hero-head">
+    <div class="head-row">
+      <div class="avatar">👑</div>
+      <div class="head-text">
+        <h1 class="head-title">태영 님 비서실</h1>
+        <div class="head-sub"><span class="dot live"></span>태영 님 전용 · 탱구 본부</div>
+      </div>
+      <div class="status-pill"><span class="dot live"></span>가동 중</div>
+    </div>
+    <nav class="tabs" id="tabs">
+      <button class="tab active" data-tab="map"><span class="ti">🗺️</span>오피스 맵</button>
+      <button class="tab" data-tab="meet"><span class="ti">💬</span>회의실</button>
+      <button class="tab" data-tab="work"><span class="ti">📋</span>작업실</button>
+      <button class="tab" data-tab="status"><span class="ti">📊</span>비서현황</button>
+      <button class="tab" data-tab="memo"><span class="ti">📝</span>메모</button>
+    </nav>
+  </header>
+
+  <!-- ================= 오피스 맵 ================= -->
+  <section class="tabpane on" id="pane-map">
+    <div class="hero-card">
+      <span class="hero-pill">👑 탱구 비서실 본부</span>
+      <h2 class="hero-h">대장님, 파트 5개가 가동 중이에요</h2>
+      <p class="hero-p">방을 눌러 들어가 보세요. 파트별 최신 보고와 진행 상황이 바로 뜹니다.</p>
+    </div>
+
+    <div class="controls">
+      <div class="seg" id="mapSeg">
+        <button data-mode="basic">🗺️ 기본</button>
+        <button data-mode="clay" class="on">🧸 클레이</button>
+      </div>
+      <button class="toggle on" id="motionToggle"><span>✨ 움직임</span><span class="switch"></span></button>
+    </div>
+
+    <div class="stat-pills">
+      <span class="stat-pill"><span class="dot"></span><b>5개</b> 파트 가동</span>
+      <span class="stat-pill">👥 탱구 외 <b>4</b>파트</span>
+      <span class="stat-pill">⏱ 다음 <b id="nextQuick">05:26</b></span>
+    </div>
+
+    <div class="map-wrap moving" id="mapWrap">
+      <img class="map-img" id="mapImg" src="office-clay.webp" alt="탱구 본부 오피스 맵" width="1100" height="1100">
+      <div id="badges"></div>
+    </div>
+    <p class="map-hint">원하는 티트 배지를 탭하면 오늘 기준 진행 현황이 열려요</p>
+
+    <div class="pwa-note">
+      📲 <span><b>홈 화면에 추가</b>하면 앱처럼 열려요. 안드로이드 크롬·삼성 인터넷은 우측 상단 메뉴 → “홈 화면에 추가”, 아이폰은 공유 → “홈 화면에 추가”.</span>
+    </div>
+
+    <div class="sec-title">오늘의 한 줄 <span class="cnt">11/27 20시 리포트</span></div>
+    <div class="card" style="padding:14px 15px">
+      <div style="font-size:13px;line-height:1.65;color:#3A3026">
+        48h <b>13,426뷰</b>(+9.9%) · 순수 구독 <b>134명</b>으로 주간 +50 목표는 채웠습니다.
+        단일 1만 뷰는 아직 미달(최고 4,199) — <b>30만 뷰 기준</b>으로만 판정합니다.
+      </div>
+      <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+        <span class="stat-pill" style="padding:6px 10px;font-size:11px">📈 노출 병목</span>
+        <span class="stat-pill" style="padding:6px 10px;font-size:11px">🎬 오늘 9편 2,494뷰</span>
+        <span class="stat-pill" style="padding:6px 10px;font-size:11px">💬 미응답 0</span>
+      </div>
+    </div>
+
+    <p class="foot">탱구 본부 · 태영 님 전용<br>자료 기준 2026-11-27 20:00 유튜브 9채널 실측 · <b>비밀번호·주소·연락처는 담지 않습니다</b></p>
+  </section>
+
+  <!-- ================= 회의실 ================= -->
+  <section class="tabpane" id="pane-meet">
+    <div class="subtabs" id="subtabs">
+      <button class="subtab" data-room="board">🏛️ 대회의실</button>
+      <button class="subtab on" data-room="chief">🎯 지휘실</button>
+      <button class="subtab" data-room="lounge">☕ 라운지</button>
+    </div>
+    <div class="room-bar"><span class="dot live"></span><span id="roomLabel">🎯 지휘실 · ON 5명</span></div>
+
+    <div class="chat" id="chat"></div>
+
+    <div class="composer">
+      <div class="mentions" id="mentions">
+        <button class="mention" data-m="@all">@all</button>
+        <button class="mention" data-m="@제작탱구">@제작탱구</button>
+        <button class="mention" data-m="@분석탱구">@분석탱구</button>
+        <button class="mention" data-m="@소통탱구">@소통탱구</button>
+        <button class="mention" data-m="@사업탱구">@사업탱구</button>
+      </div>
+      <div class="input-row">
+        <input id="chatInput" type="text" placeholder="대장님 지시나 메모를 남겨 보세요" autocomplete="off">
+        <button class="send" id="sendBtn" aria-label="보내기">↑</button>
+      </div>
+      <p class="sim-note">이 화면은 폰에만 저장되는 미리보기예요 — 자동 응답은 시뮬레이션이고, 실제 지시는 피클 앱에서 전달됩니다.</p>
+    </div>
+  </section>
+
+  <!-- ================= 작업실 ================= -->
+  <section class="tabpane" id="pane-work">
+    <div class="room-hero">
+      <span class="hero-pill">📋 작업실 · 자동 가동 스케줄</span>
+      <h2 class="hero-h">매일 돌아가는 정기 루틴</h2>
+      <p class="hero-p">태영 님이 따로 챙기지 않으셔도 탱구가 정해진 시각에 처리해요.</p>
+    </div>
+    <div class="sec-title">매일</div>
+    <div id="schedDaily"></div>
+    <div class="sec-title">매주 · 매월</div>
+    <div id="schedWeekly"></div>
+    <div class="sec-title">예약된 날짜</div>
+    <div id="schedOnce"></div>
+    <p class="foot">시각은 모두 한국 시간(KST) 기준이에요.<br>“다음 실행”은 폰 시계로 계산한 예상 시각입니다.</p>
+  </section>
+
+  <!-- ================= 비서현황 ================= -->
+  <section class="tabpane" id="pane-status">
+    <div class="kpi">
+      <div class="card kpi-card">
+        <div class="kpi-k">📈 48시간 조회 (9채널)</div>
+        <div class="kpi-v">13,426<small>뷰</small></div>
+        <div class="kpi-s up">▲ 9.9% · 어제 12,054</div>
+      </div>
+      <div class="card kpi-card">
+        <div class="kpi-k">👥 순수 누적 구독</div>
+        <div class="kpi-v">134<small>명</small></div>
+        <div class="kpi-s up">이번 주 +51명</div>
+      </div>
+    </div>
+
+    <div class="card goal">
+      <div class="goal-h">주간 목표 (11/23~29) <span>태영 님 채점 기준</span></div>
+      <div class="goal-row">
+        <div class="goal-l"><span>① 순수 신규 +50명</span><span class="st ok">달성</span></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <div class="goal-note">11/22 83명 → 11/27 134명 · +51명 (102%)</div>
+      </div>
+      <div class="goal-row">
+        <div class="goal-l"><span>② 단일 영상 1만 뷰</span><span class="st no">미달</span></div>
+        <div class="bar low"><i style="width:42%"></i></div>
+        <div class="goal-note">이번 주 최고 1,502 · 역대 최고 4,199 (기준의 42%)</div>
+      </div>
+    </div>
+
+    <div class="sec-title">채널별 48시간 <span class="cnt">스튜디오 실측</span></div>
+    <div class="card tbl">
+      <div class="tr head"><span class="ch">채널</span><span class="num">48h</span><span class="mini"></span><span class="num g">구독</span></div>
+      <div id="chTable"></div>
+    </div>
+
+    <div class="sec-title">지속률 상위 <span class="cnt">D+1 · D+3</span></div>
+    <div class="card">
+      <div id="retList"></div>
+    </div>
+
+    <div class="sec-title">가동 상태 <span class="cnt">11/27 20시 확인</span></div>
+    <div class="live-grid">
+      <div class="card live"><div class="live-k">채널 실측</div><div class="live-v">9 / 9</div><div class="live-n">VV·Jefe 포함 스튜디오</div></div>
+      <div class="card live"><div class="live-k">계정 세션</div><div class="live-v">5 / 5</div><div class="live-n">로그아웃 0회</div></div>
+      <div class="card live"><div class="live-k">야간 배치</div><div class="live-v">FAIL 0</div><div class="live-n">11/27 6편 완결</div></div>
+      <div class="card live"><div class="live-k">댓글 미응답</div><div class="live-v">0 건</div><div class="live-n">삭제·숨김 0</div></div>
+    </div>
+
+    <div class="sec-title">오늘 · 내일 실험</div>
+    <div class="card exp">
+      <div class="exp-t">🎓 Jeff Su 약속 문장</div>
+      <div class="exp-d">채널별 약속 한 문장을 제목 앞머리·고정댓글 첫 줄·설명란에 3주 같은 문장으로 반복. 스캇토 “毎日19:24、3分で判決”.</div>
+    </div>
+    <div class="card exp">
+      <div class="exp-t">🪝 2,000뷰 벽 — 첫 문장 규칙</div>
+      <div class="exp-d">첫 대사 12자 이하(21자 이하 중위 1,165뷰 vs 초과 131뷰) · 0.0초 정면 얼굴 30%↑ · 첫 3초 2인 관계 컷 · 9:16 풀블리드.</div>
+    </div>
+    <div class="card exp">
+      <div class="exp-t">🔀 토요일 슬롯 셔플</div>
+      <div class="exp-d">스캇토 07:53 · 13:41 · 19:31 / 참교육 09:22 · 20:18. 12:50은 3일 연속 부진이라 13:41로 한 칸 이동해 검증합니다.</div>
+    </div>
+    <div class="card exp">
+      <div class="exp-t">📝 지식물 제목 예외</div>
+      <div class="exp-d">사연 2채널은 떡밥형 유지, 지식물(연어·역전·RFV·CJ·VV·Jefe)만 숫자 없는 ‘변화 약속’ 제목 허용. 제목 31자·110초 상한은 공통.</div>
+    </div>
+    <p class="foot">최대 채널 6,409뷰 = 30만 뷰 기준 2.1%.<br>성과로 부르지 않고 초기 노출 구간으로만 기록합니다.</p>
+  </section>
+
+  <!-- ================= 메모 ================= -->
+  <section class="tabpane" id="pane-memo">
+    <div class="room-hero">
+      <span class="hero-pill">📝 메모 · 태영 님 직접 처리</span>
+      <h2 class="hero-h">열린 일 <span id="openCount" style="color:#7A4E24">6</span>건</h2>
+      <p class="hero-p">탱구가 못 대신하는 것만 모았어요. 끝난 일은 체크해 주세요.</p>
+    </div>
+    <div id="memoList"></div>
+    <div class="add-row">
+      <input id="memoInput" type="text" placeholder="새 메모 추가 (예: 12/1 토큰 재인증)" autocomplete="off">
+      <button id="memoAdd">추가</button>
+    </div>
+
+    <div class="sec-title">최근 확정 규칙 <span class="cnt">제작·검수 기준</span></div>
+    <div id="rules"></div>
+    <p class="foot">규칙은 실행·검수에 걸릴 때까지가 완료 — 문서만 있으면 미완료로 봅니다.</p>
+  </section>
+
+</div>
+
+<!-- bottom sheet -->
+<div class="backdrop" id="backdrop"></div>
+<div class="sheet" id="sheet">
+  <div class="sheet-head">
+    <div class="sheet-ico" id="shIco">🎯</div>
+    <div style="flex:1;min-width:0">
+      <h3 class="sheet-t" id="shTitle">지휘실</h3>
+      <div class="sheet-s" id="shSub">총괄 탱구</div>
+    </div>
+    <button class="sheet-x" id="shClose" aria-label="닫기">✕</button>
+  </div>
+  <div class="sheet-body">
+    <div id="shRows"></div>
+    <button class="sheet-btn" id="shTalk">이 파트와 회의실에서 대화하기</button>
+  </div>
+</div>
+
+<script>
+/* ============ 데이터 ============ */
+const PARTS = {
+  chief:{icon:'🎯',name:'지휘실',sub:'총괄 탱구 · 판단과 최종 보고',room:'chief',mention:'@all',
+    rows:[['지금 상태','9채널 실측·편성·검수 총괄 가동 중'],
+          ['최근 보고','11/27 20:00 · 48h 13,426뷰 (+9.9%) · 순수 구독 134명'],
+          ['주간 목표','① +50명 달성(102%) · ② 단일 1만 뷰 미달(최고 4,199)'],
+          ['다음 실행','05:26 아침 브리핑 · 01:57 야간 배치'],
+          ['판단','병목은 이탈이 아니라 피드 노출 물량']]},
+  board:{icon:'🏛️',name:'대회의실',sub:'5개 파트 합동 회의',room:'board',mention:'@all',
+    rows:[['오늘 결정','토요일 슬롯 셔플 — 스캇토 07:53·13:41·19:31 / 참교육 09:22·20:18'],
+          ['이식','Jeff Su 검증된 4개만 (약속 문장 · 오프닝 5비트 · 질문형 고정댓글 · 공유 CTA)'],
+          ['기각','제목 숫자(91편 역상관 434 vs 1,033) · 길이 확대 · 카덴스 축소'],
+          ['다음 안건','12:50 → 13:41 이동 검증 · VPH.KR 동결 처리']]},
+  prod:{icon:'🎬',name:'쇼츠 제작',sub:'제작 탱구 · 야간 배치와 발행',room:'chief',mention:'@제작탱구',
+    rows:[['오늘 발행','9편 · 2,494뷰 (재업로드 2편이 회복 견인)'],
+          ['회복','스캇토 #28 1→446 · 참교육 37호 5→503 · CJ 18호 16(실패)'],
+          ['규격','스캇토 70~90초 / 참교육 90~110초 · 첫 대사 12자 이하 · 9:16'],
+          ['다음','01:55 야간 배치 6편 → 07:53 첫 발행']]},
+  anal:{icon:'📈',name:'성과 분석',sub:'분석 탱구 · 실측과 판정',room:'chief',mention:'@분석탱구',
+    rows:[['48h 조회','13,426 (+9.9%) · 최대 채널 스캇토 6,409'],
+          ['30만 기준','최대 채널 2.1% — 아직 초기 노출 구간'],
+          ['지속률','참교육 33호 76.0% · 스캇토 34호 72.1% · 참교육 34호 74.1%'],
+          ['다음','주간 리포트 일 20:00 · 12:50 실험 판정']]},
+  social:{icon:'💬',name:'댓글 소통',sub:'소통 탱구 · 답글과 하트',room:'chief',mention:'@소통탱구',
+    rows:[['오늘 댓글','질문 0 · 정정 0 · 칭찬 1 · 도발 0'],
+          ['하트','스캇토 @shirokuma753·@rokuroku214 · 逆転 @あら還真っ只中'],
+          ['미응답','0건 (8채널 필터) · VV·Jefe 하트 확인 완료'],
+          ['원칙','삭제·숨김·신고 0건 — 어떤 사유로도 하지 않음']]},
+  biz:{icon:'💰',name:'Etsy / 혜택',sub:'사업 탱구 · 정산과 지원금',room:'chief',mention:'@사업탱구',
+    rows:[['페이오니아','가입·약관 완료 · 신분증/셀피와 주소 증빙만 남음'],
+          ['Etsy','샵 개설 대기 (심사 약 3영업일 예상)'],
+          ['알림 등록','연말정산 월세 세액공제 2027-01-15 · 청년월세 2027-02-15'],
+          ['원칙','서류·비밀번호·계좌는 태영 님이 직접 입력']]},
+  lounge:{icon:'☕',name:'라운지',sub:'쉬어가는 자리 · 오늘의 기록',room:'lounge',mention:'@all',
+    rows:[['최고 기록','4,199뷰 (oQ-GX8eN3ks) — 다음 목표는 30만'],
+          ['이번 주 실험','Jeff Su 약속 문장 · 12:50→13:41 셔플'],
+          ['잔소리','1~2천 뷰는 성과로 부르지 않기'],
+          ['커피','한 잔 더 내려도 됩니다']]}
+};
+const BADGES = [
+  {id:'board', x:{clay:20,y:45}, label:'🏛️ 대회의실'},
+  {id:'chief', x:{clay:59,y:20}, label:'🎯 지휘실'},
+  {id:'prod',  x:{clay:33,y:41}, label:'🎬 쇼츠 제작'},
+  {id:'anal',  x:{clay:69,y:43}, label:'📈 성과 분석'},
+  {id:'social',x:{clay:51,y:62}, label:'💬 댓글 소통'},
+  {id:'biz',   x:{clay:87,y:30}, label:'💰 Etsy/혜택'},
+  {id:'lounge',x:{clay:77,y:80}, label:'☕ 라운지'}
+];
+const BADGE_POS_BASIC = {
+  board:[22,55], chief:[49,17], prod:[40,41], anal:[68,41], social:[40,58], biz:[88,25], lounge:[78,77]
+};
+
+const CHANNELS = [
+  ['スカッと裁判',6409,47],['참교육극장',5704,62],['逆転バタフライ',626,19],
+  ['연어참치',431,6],['Veredicto Viral',116,12],['Jefe Tóxico',65,8],
+  ['Cubicle Justice',37,0],['Red Flag Vault',24,6],['Mythic Titan',14,1]
+];
+const RETENTION = [
+  ['참교육 33호',76.0],['참교육 34호',74.1],['스캇토 34호',72.1],
+  ['스캇토 35호',71.2],['참교육 29호',70.6],['Red Flag 19호',70.6],['스캇토 36호',67.8]
+];
+const SCHEDULES = [
+  {g:'daily',ico:'☀️',name:'아침 브리핑',when:'매일 05:26',at:'05:26',
+   desc:'날씨·대기질(수원 곡반정동 기준), 밤사이 배치 결과, 오늘 편성을 한 번에 보고해요.'},
+  {g:'daily',ico:'📊',name:'VPH.KR 일일 벤치마크',when:'매일 01:40',at:'01:40',
+   desc:'5개국 소형 대박 패턴을 모아 목표 길이·제목·소재 축을 갱신. 원본 집계는 11/24부터 동결 상태예요.'},
+  {g:'daily',ico:'🌙',name:'야간 숏츠 일괄 제작',when:'매일 01:55',at:'01:55',
+   desc:'6~7편 제작 → 24항목 검수 FAIL 0 통과분만 다음 날 아침 업로드.'},
+  {g:'daily',ico:'🎬',name:'숏츠 발행 슬롯',when:'하루 6~7편',at:'07:53',
+   desc:'스캇토 07:53·13:41·19:31 / 참교육 09:22·20:18. 로테이션 6채널은 요일 고정(각 주 2편).'},
+  {g:'daily',ico:'💬',name:'댓글 소통 점검',when:'매시 :40',at:'40m',
+   desc:'08:40~23:40 매시간 신규 댓글 확인 → 답글·하트. 삭제·숨김·신고는 하지 않아요.'},
+  {g:'daily',ico:'📊',name:'일일 성과 리포트',when:'매일 20:00',at:'20:00',
+   desc:'9채널 스튜디오 48h 실측 · 구독 · 지속률 · 댓글 4분류를 정리해 보고.'},
+  {g:'weekly',ico:'🏆',name:'주간 성장률 리포트',when:'매주 일 20:00',weekday:[0],at:'20:00',
+   desc:'주간 목표(순수 +50 · 단일 1만) 채점과 채널별 증감.'},
+  {g:'weekly',ico:'📈',name:'월간 성장률 리포트',when:'매월 1일 20:00',monthday:1,at:'20:00',
+   desc:'월 단위 성장률과 다음 달 실험 계획.'},
+  {g:'weekly',ico:'🎬',name:'참교육극장 롱폼',when:'매주 수 13:30',weekday:[3],at:'13:30',
+   desc:'13:30 제작 → 목 07:00 공개. 오프닝 5비트(갈등 → 호명 → 문제 → 목차 → 보상) 적용.'},
+  {g:'weekly',ico:'🐉',name:'Mythic Titan',when:'72시간 주기',days3:true,
+   desc:'문명형 연속 시리즈. 다음 회차까지 72시간 간격 유지.'},
+  {g:'once',ico:'🏠',name:'연말정산 월세 세액공제 알림',when:'2027-01-15',once:'2027-01-15T10:02',
+   desc:'신청 시즌에 맞춰 준비 서류와 일정을 먼저 알려드려요.'},
+  {g:'once',ico:'🏠',name:'청년월세 지원 신청 확인',when:'2027-02-15',once:'2027-02-15T10:02',
+   desc:'신청 창구·자격·필요 서류를 그날 다시 확인해 드려요.'}
+];
+
+const SEEDS = {
+  chief:[
+    {r:'chief',ts:'11/26 10:25',t:'지난주 목표 실패로 채점받았습니다. 이번 주는 순수 +50명과 단일 1만 뷰, 두 개로 잡고 갑니다.'},
+    {r:'user',ts:'11/26 10:25',t:'저번주 목표 실패야. 이번주 목표 이뤄내'},
+    {r:'anal',ts:'11/27 20:22',t:'20시 리포트 올렸습니다.\n48h 13,426뷰(+9.9%), 순수 구독 134명 — 주간 +50 목표는 달성입니다. 단일 1만 뷰는 미달(최고 4,199).'},
+    {r:'chief',ts:'11/27 20:22',t:'최대 채널 6,409뷰는 30만 뷰 기준 2.1%입니다. 성과로 부르지 않고 초기 노출 구간으로만 기록했습니다.'},
+    {r:'prod',ts:'11/27 20:24',t:'오늘 회복 2건 나왔습니다. 스캇토 #28 1→446뷰, 참교육 37호 5→503뷰. 둘 다 언어 태그 교정 후 재업로드한 편입니다.\nCJ 18호는 16뷰로 실패 — 구독 0 채널 유입 문제로 봅니다.'},
+    {r:'user',ts:'11/27 20:30',t:'12시 50분 슬롯은 왜 계속 안 붙어'},
+    {r:'anal',ts:'11/27 20:31',t:'#28 1뷰 · #35 7시간 50뷰 · #38 7.9시간 5뷰로 3일 연속입니다. 슬롯 자체를 한 칸만 옮겨 13:41로 검증해 보겠습니다.'},
+    {r:'chief',ts:'11/27 20:33',t:'토요일 편성 반영 끝냈습니다 — 스캇토 07:53·13:41·19:31 / 참교육 09:22·20:18. 나머지 채널은 ±15분 이내라 기존 매칭을 깨지 않습니다.'},
+    {r:'user',ts:'11/27 23:02',t:'제프수 채널 보고 학습해 이 사람 스킬'},
+    {r:'chief',ts:'11/27 23:10',t:'320편(롱폼 201·쇼츠 119) 뜯고 우리 91편으로 대조했습니다. 가져온 건 4개만 — ①약속 문장 고정 ②목차 1줄은 3초 뒤 ③질문형 고정댓글 ④마지막 CTA는 공유.'},
+    {r:'anal',ts:'11/27 23:10',t:'제목에 숫자 넣기는 우리 데이터에서 역효과(434 vs 1,033)라 기각했습니다. 길이 확대·카덴스 축소도 버렸습니다.'},
+    {r:'biz',ts:'11/27 23:20',t:'사업 쪽은 페이오니아 본인확인(신분증·셀피)과 주소 증빙만 남았습니다. 휴대폰에서 마무리해 주시면 심사 후 Etsy 정산 연동까지 이어서 안내할게요.'}
+  ],
+  board:[
+    {r:'chief',ts:'11/27 20:35',t:'오늘 대회의실 안건 세 개입니다. ①슬롯 셔플 검증 ②Jeff Su 이식 범위 ③다음 주 실험 우선순위.'},
+    {r:'prod',ts:'11/27 20:36',t:'제작 쪽은 첫 대사 12자 이하를 야간 배치 프롬프트에 숫자로 박아 넣었습니다. 8편 중 6편이 통과했습니다.'},
+    {r:'anal',ts:'11/27 20:37',t:'첫 대사 21자 이하 중위 1,165뷰, 21자 초과 131뷰입니다. 12자 이하로 더 좁혀도 될 것 같습니다.'},
+    {r:'social',ts:'11/27 20:38',t:'댓글은 질문 0·정정 0·칭찬 1·도발 0, 미응답 0건입니다. 오늘은 하트 3건만 새로 넣었어요.'},
+    {r:'biz',ts:'11/27 20:40',t:'Etsy 쪽은 아직 샵 개설 전이라 상품 링크 작업은 대기입니다. 무료 체크리스트 PDF는 샵 오픈 후 연결하는 게 안전합니다.'},
+    {r:'user',ts:'11/27 20:45',t:'지식물은 제목 규칙 좀 풀어줘. 사연은 지금처럼 떡밥으로.'},
+    {r:'chief',ts:'11/27 20:46',t:'네, 사연 2채널(스캇토·참교육)은 떡밥형 유지, 지식물 6채널만 숫자 없는 변화 약속형 허용으로 규칙에 넣었습니다.'},
+    {r:'anal',ts:'11/27 20:47',t:'단, 제목 31자·110초 상한은 공통으로 유지합니다. 31자 초과 중위 193뷰, 110초 초과 114뷰였습니다.'}
+  ],
+  lounge:[
+    {r:'chief',ts:'11/27 01:40',t:'오늘도 01:55 배치 대기 중입니다. VPH는 나흘째 동결이라 플레이북 갱신은 건너뜁니다.'},
+    {r:'prod',ts:'11/27 01:41',t:'6편 큐에 올렸습니다. 자막 싱크는 WordBoundary 타임스탬프로 맞추는 중이에요.'},
+    {r:'anal',ts:'11/27 01:42',t:'참고로 24시간 확산 배수 중앙값 1.0입니다. 72시간 기다릴 이유가 거의 없어요.'},
+    {r:'user',ts:'11/27 01:50',t:'이번 주도 가자'},
+    {r:'chief',ts:'11/27 01:50',t:'네, 대장님. 30만 뷰 기준으로만 말하겠습니다.'}
+  ]
+};
+const RULES = [
+  ['성과 기준','1~2천 뷰는 성과로 부르지 않고 30만 뷰 기준 미달로만 보고합니다.'],
+  ['떡밥형 제목','내용·금액·결말 요약 금지. 감정 떡밥만 던지고 0~3초에 회수. 제목 31자 이하.'],
+  ['첫 문장','첫 대사는 가해자 12자 이하 · 0.0초 정면 얼굴 30%↑ · 첫 3초 2인 관계 컷.'],
+  ['길이','스캇토 70~90초 / 참교육 90~110초. 110초 초과 금지.'],
+  ['화면','세로 9:16 풀블리드. 가로 16:9 정중앙 크롭 금지 — 렌더 후 0.0초·중간 프레임 눈으로 확인.'],
+  ['소재','개인적 부당함이 실화 판례보다 4배 강함(4,199 vs 1,069). 실화는 스캇토 1/3·참교육 1/2 이하.'],
+  ['댓글','질문·칭찬·이모지까지 전수 응답. 삭제·숨김·신고는 어떤 사유로도 금지.'],
+  ['YPP 방어','템플릿 복붙·서로 대체 가능한 전개 금지, 혐오·충격 자극 의존 금지, 합성미디어 고지 유지.'],
+  ['Jeff Su 이식','약속 문장 고정 · 목차 1줄은 3초 뒤 · 질문형 고정댓글 · 마지막 CTA는 공유. 제목 숫자·길이 확대는 안 함.'],
+  ['검수','24항목 FAIL 0을 통과하기 전에는 업로드하지 않습니다. 규칙은 걸릴 때까지가 완료.']
+];
+const MEMO_DEFAULT = [
+  {id:'m1',tag:'biz',tagName:'사업',title:'페이오니아 본인확인(신분증·셀피) + 주소 증빙 올리기',sub:'휴대폰 직접 · 공과금/은행/세금 서류 중 1종, 20MB 이하',done:false},
+  {id:'m2',tag:'ch',tagName:'채널',title:'미인증 4채널 6초 인증 (RFV·CJ·Jefe·Mythic)',sub:'인증 후 보관된 썸네일 일괄 적용',done:false},
+  {id:'m3',tag:'app',tagName:'앱',title:'@ssobc147289 과거 하트 해제',sub:'유튜브 앱에서 직접 · API는 해제 미지원',done:false},
+  {id:'m4',tag:'app',tagName:'앱',title:'참교육 32호 댓글 핀 고정',sub:'스튜디오 앱에서 직접 (API 미지원)',done:false},
+  {id:'m5',tag:'ch',tagName:'채널',title:'EN/ES OAuth 12/01 13:50 만료 전 재인증',sub:'또는 GCP 동의 화면 프로덕션 전환 결정',done:false},
+  {id:'m6',tag:'ch',tagName:'채널',title:'VPH.KR 나흘째 동결 — 운영자 문의할지 결정',sub:'11/23 02:00 스냅샷에서 집계 정지, 장애 공지 없음',done:false}
+];
+
+/* ============ 유틸 ============ */
+const $ = s => document.querySelector(s);
+const store = {
+  get(k,d){ try{ const v=localStorage.getItem('tg.office.'+k); return v?JSON.parse(v):d; }catch(e){ return d; } },
+  set(k,v){ try{ localStorage.setItem('tg.office.'+k, JSON.stringify(v)); }catch(e){} }
+};
+const WHO = {
+  user:{n:'태영 님',r:'대장님',e:'👑'},
+  chief:{n:'총괄 탱구',r:'지휘',e:'🎯'},
+  prod:{n:'제작 탱구',r:'제작',e:'🎬'},
+  anal:{n:'분석 탱구',r:'분석',e:'📈'},
+  social:{n:'소통 탱구',r:'소통',e:'💬'},
+  biz:{n:'사업 탱구',r:'사업',e:'💰'}
+};
+function nowLabel(){
+  const d=new Date(), h=d.getHours(), m=d.getMinutes();
+  const ap=h<12?'오전':'오후', hh=h%12||12;
+  return ap+' '+(hh<10?'0'+hh:hh)+':'+(m<10?'0'+m:m);
+}
+function tmrLabel(){
+  const d=new Date();
+  return (d.getMonth()+1)+'/'+d.getDate()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+}
+function fmt(n){ return n.toLocaleString('ko-KR'); }
+function nextRun(s){
+  const now=new Date();
+  if(s.once){ const t=new Date(s.once); return t>now?t:null; }
+  if(s.days3){ const t=new Date(now.getTime()+ (3*24*60)*60000); return t; }
+  const [H,M]=s.at.split(':').map(Number);
+  if(s.g==='daily'){
+    const t=new Date(now); t.setHours(H,M,0,0);
+    if(t<=now) t.setDate(t.getDate()+1);
+    return t;
+  }
+  if(s.weekday){
+    for(let i=0;i<8;i++){
+      const t=new Date(now); t.setDate(t.getDate()+i); t.setHours(H,M,0,0);
+      if(s.weekday.includes(t.getDay()) && t>now) return t;
+    }
+  }
+  if(s.monthday){
+    const t=new Date(now.getFullYear(), now.getMonth(), s.monthday, H, M, 0, 0);
+    if(t<=now) t.setMonth(t.getMonth()+1);
+    return t;
+  }
+  return null;
+}
+function untilLabel(t){
+  const diff=t-new Date();
+  if(diff<0) return '곧 실행';
+  const mins=Math.round(diff/60000);
+  if(mins<60) return mins+'분 후';
+  const h=Math.floor(mins/60), m=mins%60;
+  if(h<24) return h+'시간'+(m?' '+m+'분':'')+' 후';
+  return Math.floor(h/24)+'일 '+(h%24)+'시간 후';
+}
+function nextHHMM(){
+  let best=null;
+  SCHEDULES.forEach(s=>{ const t=nextRun(s); if(t && (!best||t<best.t)) best={t,s}; });
+  if(!best) return '';
+  const t=best.t;
+  return String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
+}
+
+/* ============ 탭 ============ */
+let state={tab:store.get('tab','map'),room:store.get('room','chief'),mode:store.get('mode','clay'),
+  motion:store.get('motion',true)};
+function setTab(name){
+  state.tab=name; store.set('tab',name);
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));
+  document.querySelectorAll('.tabpane').forEach(p=>p.classList.toggle('on',p.id==='pane-'+name));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
+
+/* ============ 오피스 맵 ============ */
+function renderBadges(){
+  const wrap=$('#badges'); wrap.innerHTML='';
+  BADGES.forEach((b,i)=>{
+    const pos = state.mode==='clay' ? [b.x.clay, b.x.y] : BADGE_POS_BASIC[b.id];
+    const el=document.createElement('button');
+    el.className='badge'; el.style.left=pos[0]+'%'; el.style.top=pos[1]+'%';
+    el.style.setProperty('--d',(i*0.28).toFixed(2)+'s');
+    el.innerHTML='<span class="lv"></span>'+b.label;
+    el.onclick=()=>openSheet(b.id);
+    wrap.appendChild(el);
+  });
+}
+function setMode(m){
+  state.mode=m; store.set('mode',m);
+  document.querySelectorAll('#mapSeg button').forEach(b=>b.classList.toggle('on',b.dataset.mode===m));
+  $('#mapImg').src = m==='clay' ? 'office-clay.webp' : 'office-basic.webp';
+  renderBadges();
+}
+document.querySelectorAll('#mapSeg button').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+$('#motionToggle').onclick=function(){
+  state.motion=!state.motion; store.set('motion',state.motion);
+  this.classList.toggle('on',state.motion);
+  $('#mapWrap').classList.toggle('moving',state.motion);
+};
+/* sheet */
+let curPart='chief';
+function openSheet(id){
+  curPart=id; const p=PARTS[id];
+  $('#shIco').textContent=p.icon;
+  $('#shTitle').textContent=p.name;
+  $('#shSub').textContent=p.sub;
+  $('#shRows').innerHTML=p.rows.map(([k,v])=>`<div class="row"><div class="k">${k}</div><div class="v">${v}</div></div>`).join('');
+  $('#backdrop').classList.add('on'); $('#sheet').classList.add('on');
+}
+function closeSheet(){ $('#backdrop').classList.remove('on'); $('#sheet').classList.remove('on'); }
+$('#shClose').onclick=closeSheet; $('#backdrop').onclick=closeSheet;
+$('#shTalk').onclick=()=>{
+  const p=PARTS[curPart]; closeSheet(); setRoom(p.room); setTab('meet');
+  const inp=$('#chatInput'); inp.value=p.mention+' '; inp.focus();
+};
+
+/* ============ 회의실 ============ */
+let msgs = store.get('msgs', SEEDS);
+function saveMsgs(){ store.set('msgs',msgs); }
+function renderChat(){
+  const box=$('#chat');
+  box.innerHTML = msgs[state.room].map(m=>msgHTML(m)).join('');
+  box.scrollTop = box.scrollHeight;
+}
+function msgHTML(m){
+  const w=WHO[m.r]; const right = m.r==='user';
+  return `<div class="msg ${right?'right':''}">
+    <div class="mini-av ${right?'user':''}">${w.e}</div>
+    <div class="msg-col">
+      <div class="msg-meta"><span class="who">${w.n}</span><span class="role">${w.r==='대장님'?'(대장님)':w.r}</span><span>${m.ts||''}</span></div>
+      <div class="bubble">${escapeHTML(m.t)}</div>
+    </div></div>`;
+}
+function escapeHTML(s){ return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function setRoom(r){
+  state.room=r; store.set('room',r);
+  document.querySelectorAll('.subtab').forEach(b=>b.classList.toggle('on',b.dataset.room===r));
+  const label={board:'🏛️ 대회의실 · 파트 5명',chief:'🎯 지휘실 · ON 5명',lounge:'☕ 라운지 · 자유'};
+  $('#roomLabel').textContent=label[r];
+  renderChat();
+}
+document.querySelectorAll('.subtab').forEach(b=>b.onclick=()=>setRoom(b.dataset.room));
+
+const REPLIES = {
+  chief:['확인했습니다, 대장님. 총괄에서 바로 챙기고 진행 상황만 짧게 보고드릴게요.',
+         '네, 접수했습니다. 다음 리포트에 결과 붙여서 올리겠습니다.',
+         '알겠습니다. 우선순위대로 처리하고, 막히는 부분만 먼저 알려드릴게요.'],
+  prod:['제작 쪽 확인했습니다. 규격(첫 대사 12자·70~90초·9:16 풀블리드) 맞춰서 01:55 배치에 넣겠습니다.',
+        '네, 대장님. 그 편은 첫 3초 2인 관계 컷으로 다시 뽑고 24항목 검수 통과 후 올리겠습니다.',
+        '접수했습니다. 다음 슬롯에 반영하고 48시간 조회로 판정해 보고할게요.'],
+  anal:['분석 쪽 접수했습니다. 48h 기준으로 채널별 분리해서 숫자만 그대로 올리겠습니다.',
+        '네, 30만 뷰 기준으로만 판정하겠습니다. 1~2천 뷰는 성과로 부르지 않습니다.',
+        '확인했습니다. 지속률과 노출 물량을 나눠서 다음 리포트에 넣겠습니다.'],
+  social:['소통 쪽 확인했습니다. 신규 댓글부터 답글·하트 순서로 처리하겠습니다. 삭제·숨김은 하지 않습니다.',
+          '네, 대장님. 채널 언어에 맞춰 자연스럽게 답글 달고 미응답 0건 유지하겠습니다.',
+          '접수했습니다. 처리 결과는 건수로만 짧게 알려드릴게요.'],
+  biz:['사업 쪽 확인했습니다. 페이오니아 서류·셀피는 태영 님 휴대폰에서 마무리해 주시면 Etsy 연동까지 이어가겠습니다.',
+       '네. 서류·계좌 정보는 제가 만들지 않고 태영 님이 직접 입력하시는 선을 지키겠습니다.',
+       '접수했습니다. 정산 조건(12개월 $6,000 미만 연회비 $29.95) 확인된 상태로 진행합니다.']
+};
+function pickTarget(text){
+  const s=text;
+  if(/@제작|제작|업로드|슬롯|쇼츠|영상/.test(s)) return 'prod';
+  if(/@분석|리포트|조회|지속률|성과|숫자/.test(s)) return 'anal';
+  if(/@소통|댓글|하트|시청자/.test(s)) return 'social';
+  if(/@사업|페이오니아|etsy|정산|혜택|세액|월세/i.test(s)) return 'biz';
+  if(/@all/.test(s)) return 'all';
+  return null;
+}
+function pushMsg(room,r,t){
+  msgs[room].push({r,t,ts:nowLabel()});
+  saveMsgs(); renderChat();
+}
+function send(){
+  const inp=$('#chatInput'); const text=inp.value.trim(); if(!text) return;
+  inp.value='';
+  pushMsg(state.room,'user',text);
+  let target=pickTarget(text) || (state.room==='lounge'?'chief':'chief');
+  const box=$('#chat');
+  const typing=document.createElement('div');
+  typing.className='msg typing';
+  typing.innerHTML='<div class="mini-av">🎯</div><div class="msg-col"><div class="bubble"><i></i><i></i><i></i></div></div>';
+  box.appendChild(typing); box.scrollTop=box.scrollHeight;
+  setTimeout(()=>{
+    typing.remove();
+    const who = target==='all' ? (Math.random()<.5?'chief':'prod') : target;
+    const pool=REPLIES[who]; const line=pool[Math.floor(Math.random()*pool.length)];
+    pushMsg(state.room,who,line);
+    if(target==='all'){
+      setTimeout(()=>pushMsg(state.room,'social','소통도 같이 보겠습니다. 오늘 미응답 0건 유지하고 있어요.'),900);
+    }
+  }, 750+Math.random()*600);
+}
+$('#sendBtn').onclick=send;
+$('#chatInput').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); send(); }});
+document.querySelectorAll('.mention').forEach(b=>b.onclick=()=>{
+  const inp=$('#chatInput'); const m=b.dataset.m;
+  inp.value = (inp.value.trim()? inp.value.trim()+' ':'') + m + ' ';
+  inp.focus();
+});
+
+/* ============ 작업실 ============ */
+function schedHTML(s){
+  const t=nextRun(s);
+  const next = t ? `<div class="sched-next">⏱ 다음 <b>${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}</b><span class="n">· ${untilLabel(t)}</span></div>` : '';
+  return `<div class="card sched">
+    <div class="sched-ico">${s.ico}</div>
+    <div class="sched-main">
+      <div class="sched-top"><div class="sched-name">${s.name}</div><div class="sched-when">${s.when}</div></div>
+      <div class="sched-desc">${s.desc}</div>
+      ${next}
+    </div></div>`;
+}
+function renderSchedules(){
+  const d=SCHEDULES.filter(s=>s.g==='daily').map(schedHTML).join('');
+  const w=SCHEDULES.filter(s=>s.g==='weekly').map(schedHTML).join('');
+  const o=SCHEDULES.filter(s=>s.g==='once').map(schedHTML).join('');
+  $('#schedDaily').innerHTML=d; $('#schedWeekly').innerHTML=w; $('#schedOnce').innerHTML=o;
+}
+
+/* ============ 비서현황 ============ */
+function renderStatus(){
+  const max=Math.max(...CHANNELS.map(c=>c[1]));
+  $('#chTable').innerHTML = CHANNELS.map(([n,v,s])=>`<div class="tr">
+      <span class="ch">${n}</span>
+      <span class="num">${fmt(v)}</span>
+      <span class="mini"><i style="width:${Math.max(3,(v/max)*100)}%"></i></span>
+      <span class="num g">${s}</span>
+    </div>`).join('');
+  $('#retList').innerHTML = RETENTION.map(([n,v])=>`<div class="ret-row">
+      <span class="rn">${n}</span>
+      <span class="rb"><i style="width:${v}%"></i></span>
+      <span class="rv">${v.toFixed(1)}%</span>
+    </div>`).join('');
+}
+
+/* ============ 메모 ============ */
+let memos = store.get('memos', MEMO_DEFAULT);
+function saveMemos(){ store.set('memos',memos); }
+function renderMemos(){
+  $('#memoList').innerHTML = memos.map(m=>`<div class="card memo-item ${m.done?'done':''}" data-id="${m.id}">
+      <button class="check" data-act="done">✓</button>
+      <div class="memo-body">
+        <div class="memo-t"><span class="memo-tag tag-${m.tag}">${m.tagName}</span>${escapeHTML(m.title)}</div>
+        ${m.sub?`<div class="memo-s">${escapeHTML(m.sub)}</div>`:''}
+      </div>
+      <button class="del" data-act="del">✕</button>
+    </div>`).join('');
+  const open=memos.filter(m=>!m.done).length;
+  $('#openCount').textContent=open;
+  document.querySelectorAll('.memo-item').forEach(el=>{
+    el.querySelector('[data-act="done"]').onclick=()=>{
+      const m=memos.find(x=>x.id===el.dataset.id); m.done=!m.done; saveMemos(); renderMemos();
+    };
+    el.querySelector('[data-act="del"]').onclick=()=>{
+      memos=memos.filter(x=>x.id!==el.dataset.id); saveMemos(); renderMemos();
+    };
+  });
+}
+function addMemo(){
+  const inp=$('#memoInput'); const v=inp.value.trim(); if(!v) return;
+  memos.push({id:'u'+Date.now(),tag:'app',tagName:'메모',title:v,sub:'',done:false});
+  inp.value=''; saveMemos(); renderMemos();
+}
+$('#memoAdd').onclick=addMemo;
+$('#memoInput').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); addMemo(); }});
+function renderRules(){
+  $('#rules').innerHTML = RULES.map(([t,d],i)=>`<div class="card rule">
+      <div class="rule-n">${i+1}</div>
+      <div><div class="rule-t">${t}</div><div class="rule-d">${d}</div></div>
+    </div>`).join('');
+}
+
+/* ============ init ============ */
+state.mode = state.mode==='basic'?'basic':'clay';
+setMode(state.mode);
+$('#mapWrap').classList.toggle('moving',!!state.motion);
+$('#motionToggle').classList.toggle('on',!!state.motion);
+$('#nextQuick').textContent = nextHHMM();
+setRoom(state.room);
+setTab(state.tab);
+renderSchedules(); renderStatus(); renderMemos(); renderRules();
+
+// 매시 40분 댓글 점검은 초 단위가 아니므로 1분마다 "다음 실행"만 갱신
+setInterval(()=>{ $('#nextQuick').textContent = nextHHMM(); },60000);
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
+</script>
+</body>
+</html>
