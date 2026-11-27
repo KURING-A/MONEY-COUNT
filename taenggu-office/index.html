@@ -841,11 +841,15 @@ const REPLIES = {
 };
 function pickTarget(text){
   const s=text;
-  if(/@제작|제작|업로드|슬롯|쇼츠|영상/.test(s)) return 'prod';
-  if(/@분석|리포트|조회|지속률|성과|숫자/.test(s)) return 'anal';
-  if(/@소통|댓글|하트|시청자/.test(s)) return 'social';
-  if(/@사업|페이오니아|etsy|정산|혜택|세액|월세/i.test(s)) return 'biz';
-  if(/@all/.test(s)) return 'all';
+  const m=s.match(/@(all|제작탱구|분석탱구|소통탱구|사업탱구)/);
+  if(m){
+    const map={all:'all',제작탱구:'prod',분석탱구:'anal',소통탱구:'social',사업탱구:'biz'};
+    return map[m[1]]||null;
+  }
+  if(/제작|업로드|슬롯|쇼츠|영상/.test(s)) return 'prod';
+  if(/리포트|조회|지속률|성과|숫자/.test(s)) return 'anal';
+  if(/댓글|하트|시청자/.test(s)) return 'social';
+  if(/페이오니아|etsy|정산|혜택|세액|월세/i.test(s)) return 'biz';
   return null;
 }
 function pushMsg(room,r,t){
