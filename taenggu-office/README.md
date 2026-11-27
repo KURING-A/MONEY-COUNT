@@ -2,7 +2,8 @@
 
 태영 님 전용 모바일 비서실 웹앱(PWA)입니다. 폰에서 열고 **홈 화면에 추가**하면 앱처럼 뜹니다.
 
-- 주소: https://kuring-a.github.io/taenggu-office/
+- 지금 주소: https://kuring-a.github.io/MONEY-COUNT/taenggu-office/ (KURING-A/MONEY-COUNT 저장소의 Pages 아래)
+- 옮길 곳: `KURING-A/taenggu-office` 공개 저장소를 만들면 이 폴더 내용을 그대로 올려 `https://kuring-a.github.io/taenggu-office/`로 쓸 수 있습니다.
 - 구성: 🗺️ 오피스 맵 · 💬 회의실 · 📋 작업실 · 📊 비서현황 · 📝 메모
 - 오피스 맵 이미지는 `images`(AI 생성)로 만든 클레이 스타일 3D 미니어처입니다.
 
